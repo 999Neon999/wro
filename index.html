@@ -8,308 +8,367 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #D4AF37;
-            --deep-dark: #050505;
-            --card-bg: #111111;
-            --accent-gold: #FFD700;
+            /* Light Mode - Claude / Stone Palette */
+            --bg-primary: #f8f6f2;
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --text-main: #1a1a1a;
+            --text-muted: #6b7280;
+            --accent-purple: #7c3aed;
+            --accent-gold: #b48a3d;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --glass-blur: 12px;
+            --hero-overlay: linear-gradient(to top, #f8f6f2 5%, transparent 60%);
+        }
+
+        .dark {
+            /* Dark Mode - Obsidian Palette */
+            --bg-primary: #050505;
+            --bg-card: rgba(18, 18, 18, 0.8);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-purple: #a78bfa;
+            --accent-gold: #fbbf24;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --hero-overlay: linear-gradient(to top, #050505 5%, transparent 60%);
         }
 
         body {
-            background-color: var(--deep-dark);
-            color: #ffffff;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            letter-spacing: -0.01em;
-            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
         }
 
         .font-cinzel { font-family: 'Cinzel', serif; }
 
-        /* Bento Grid Architecture */
-        .bento-wrapper {
+        /* Bento Grid */
+        .bento-container {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            grid-auto-rows: minmax(80px, auto);
-            gap: 1.25rem;
-            max-width: 1440px;
+            grid-auto-rows: minmax(100px, auto);
+            gap: 1.5rem;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem;
+            padding: 2rem;
         }
 
-        .bento-card {
-            background-color: var(--card-bg);
-            border-radius: 28px;
-            overflow: hidden;
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--border-color);
+            border-radius: 32px;
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        box-shadow 0.4s ease, border-color 0.4s ease;
         }
 
-        .bento-card:hover {
-            border-color: rgba(255, 215, 0, 0.2);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: var(--accent-purple);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
         }
 
-        /* Feature Layouts */
-        .hero-main {
-            grid-column: span 7;
-            grid-row: span 7;
-            background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.95) 100%), 
-                        url('https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&q=80&w=1200');
+        /* Hero Styling */
+        .hero-card {
+            grid-column: span 8;
+            grid-row: span 6;
+            background-image: var(--hero-overlay), url('https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&q=80&w=1200');
             background-size: cover;
             background-position: center;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 3.5rem;
+            padding: 4rem;
         }
 
-        .top-left-featured {
-            grid-column: span 5;
-            grid-row: span 4;
-            padding: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .story-insight {
-            grid-column: span 3;
-            grid-row: span 5;
-            padding: 1.75rem;
-        }
-
-        .story-mini-list {
-            grid-column: span 2;
-            grid-row: span 5;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .hardware-promo {
-            grid-column: span 5;
+        .stats-card {
+            grid-column: span 4;
             grid-row: span 3;
             padding: 2.5rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, #181818, #0a0a0a);
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-purple), #4c1d95);
+            color: white;
+            border: none;
         }
 
-        /* Typography & Decor */
-        .label-tiny { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.5; }
-        .hero-title { font-size: clamp(3rem, 6vw, 5.5rem); line-height: 0.95; letter-spacing: -0.03em; }
-        .btn-pill-white { background: #fff; color: #000; padding: 10px 24px; border-radius: 30px; font-size: 12px; font-weight: 700; transition: scale 0.2s; }
-        .btn-pill-white:hover { scale: 1.05; }
-
-        /* Overlapping Image Stack (Reference Image Style) */
-        .image-stack {
-            display: flex;
-            align-items: center;
-            height: 160px;
-            margin: 2rem 0;
-        }
-        .image-stack img {
-            width: 100px;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 3px solid #000;
-            transition: all 0.4s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-        .image-stack img:nth-child(1) { transform: rotate(-8deg); margin-right: -2rem; opacity: 0.6; }
-        .image-stack img:nth-child(2) { width: 120px; height: 170px; z-index: 2; box-shadow: 0 15px 30px rgba(0,0,0,0.6); }
-        .image-stack img:nth-child(3) { transform: rotate(8deg); margin-left: -2rem; opacity: 0.6; }
-        .image-stack img:hover { transform: scale(1.1) rotate(0deg); opacity: 1; z-index: 10; }
-
-        /* Categories Section */
-        .category-grid {
-            grid-column: span 12;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
-            margin-top: 0.5rem;
-        }
-        .cat-card {
-            height: 420px;
-            border-radius: 24px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
+        .featured-stack {
+            grid-column: span 4;
+            grid-row: span 3;
             padding: 2rem;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .cat-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            border-radius: 24px;
-        }
-        .cat-card span { position: relative; z-index: 1; }
 
-        @media (max-width: 1100px) {
-            .bento-wrapper { display: flex; flex-direction: column; }
-            .hero-main { min-height: 500px; }
-            .category-grid { grid-template-columns: 1fr 1fr; }
+        .side-news {
+            grid-column: span 4;
+            grid-row: span 4;
+            padding: 2rem;
         }
+
+        .promo-bar {
+            grid-column: span 8;
+            grid-row: span 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+        }
+
+        /* Interactive Elements */
+        .btn-action {
+            background: var(--text-main);
+            color: var(--bg-primary);
+            padding: 0.75rem 2rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* Image Overlap Logic */
+        .overlap-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+        .overlap-img {
+            width: 90px;
+            height: 120px;
+            border-radius: 16px;
+            border: 4px solid var(--bg-card);
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .overlap-img:not(:first-child) { margin-left: -2rem; }
+        .overlap-img:hover { z-index: 10; transform: scale(1.2) rotate(-3deg); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
+
+        @media (max-width: 1024px) {
+            .bento-container { display: flex; flex-direction: column; }
+            .hero-card { height: 500px; padding: 2rem; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeIn 0.8s ease forwards; }
     </style>
 </head>
-<body>
+<body class="light">
 
-    <!-- Header Navigation -->
-    <header class="flex justify-between items-center px-10 py-8 max-w-[1440px] mx-auto">
-        <div class="flex items-center">
-            <span class="font-cinzel text-2xl font-bold tracking-tighter">ECHOWEAVE<span class="text-yellow-600">.</span></span>
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center px-8 py-6 max-w-[1400px] mx-auto sticky top-0 z-50 backdrop-blur-md bg-opacity-70">
+        <div class="font-cinzel text-2xl font-bold tracking-tighter">
+            ECHOWEAVE<span style="color: var(--accent-purple)">.</span>
         </div>
-        <nav class="hidden lg:flex items-center space-x-12">
-            <a href="#" class="label-tiny opacity-80 hover:opacity-100 hover:text-yellow-500 transition">Home</a>
-            <a href="#" class="label-tiny opacity-80 hover:opacity-100 hover:text-yellow-500 transition">The Observer</a>
-            <a href="#" class="label-tiny opacity-80 hover:opacity-100 hover:text-yellow-500 transition">The Dancer</a>
-            <a href="#" class="label-tiny opacity-80 hover:opacity-100 hover:text-yellow-500 transition">CultureDex</a>
-            <a href="#" class="label-tiny text-yellow-500 opacity-100">WRO 2026</a>
-        </nav>
-        <div class="flex items-center space-x-8">
-            <svg class="w-5 h-5 opacity-40 hover:opacity-100 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <svg class="w-5 h-5 opacity-40 hover:opacity-100 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-        </div>
-    </header>
-
-    <main class="bento-wrapper">
         
-        <!-- TOP LEFT: Featured Robots/Masters -->
-        <div class="bento-card top-left-featured">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h2 class="font-cinzel text-3xl">Featured Masters</h2>
-                    <p class="label-tiny mt-2 lowercase opacity-30 tracking-normal">Translating legacy into silicon.</p>
-                </div>
-                <a href="#" class="label-tiny opacity-40 hover:opacity-100 transition">See All Archive</a>
-            </div>
-
-            <div class="image-stack">
-                <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=400" alt="Tradition 1">
-                <img src="https://images.unsplash.com/photo-1535525153412-5a42439a210d?auto=format&fit=crop&q=80&w=400" alt="Tradition 2">
-                <img src="https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&q=80&w=400" alt="Tradition 3">
-            </div>
-
-            <div class="text-center">
-                <h4 class="font-cinzel text-xl tracking-widest">Elena Vassilieva</h4>
-                <p class="label-tiny text-yellow-600 mt-1">Observer Bot Classified: Classical Ballet</p>
-                <div class="flex justify-center space-x-1.5 mt-4">
-                    <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
-                    <div class="w-1.5 h-1.5 bg-white opacity-10 rounded-full"></div>
-                    <div class="w-1.5 h-1.5 bg-white opacity-10 rounded-full"></div>
-                </div>
-            </div>
+        <div class="hidden md:flex space-x-10 text-[10px] uppercase tracking-[0.2em] font-bold opacity-70">
+            <a href="#" class="hover:text-[var(--accent-purple)] transition">Project</a>
+            <a href="#" class="hover:text-[var(--accent-purple)] transition">CultureDex</a>
+            <a href="#" class="hover:text-[var(--accent-purple)] transition">Robots</a>
+            <a href="#" class="hover:text-[var(--accent-purple)] transition">WRO 2026</a>
         </div>
 
-        <!-- HERO MAIN: Visual Centerpiece -->
-        <div class="bento-card hero-main">
-            <div class="mb-6">
-                <span class="label-tiny tracking-[0.5em] text-yellow-500">ROBOTS MEET CULTURE • WRO 2026</span>
-            </div>
-            <h1 class="font-cinzel hero-title">The Geometry <br>of <span class="italic font-light text-gray-400">HERITAGE.</span></h1>
-            <p class="max-w-md text-sm opacity-50 mt-6 leading-relaxed">
-                EchoWeave is a sensory bridge between generations. We teach machines the language of grace to ensure human history never stops moving.
+        <div class="flex items-center space-x-6">
+            <!-- Theme Toggle -->
+            <button id="theme-btn" class="p-2 rounded-full hover:bg-black hover:bg-opacity-5 transition">
+                <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+            </button>
+            <div class="h-6 w-[1px] bg-gray-300"></div>
+            <button class="text-xs font-bold uppercase tracking-widest px-4 py-2 border border-current rounded-full hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition">
+                Contact
+            </button>
+        </div>
+    </nav>
+
+    <main class="bento-container">
+        
+        <!-- Hero Section -->
+        <div class="card hero-card animate-in" style="animation-delay: 0.1s">
+            <span class="tag" style="color: var(--accent-gold)">Featured Initiative</span>
+            <h1 class="font-cinzel text-6xl md:text-7xl font-bold mb-6 leading-[0.9]">
+                Preserving <br><span class="italic font-light opacity-80">Living Motion.</span>
+            </h1>
+            <p class="max-w-md text-sm leading-relaxed opacity-70 mb-8">
+                Building a bridge between ancestral dance and future robotics. We use high-precision motion capture to teach legacy to machines.
             </p>
-            <div class="flex space-x-6 mt-10 items-center">
-                <button class="btn-pill-white">Explore CultureDex</button>
-                <button class="label-tiny border-b border-white border-opacity-20 pb-1 hover:border-opacity-100 transition">Watch The Performance</button>
+            <div class="flex space-x-4">
+                <button class="btn-action">Enter the Archive</button>
+                <button class="px-6 py-3 text-xs font-bold uppercase tracking-widest border-b border-current opacity-40 hover:opacity-100 transition">Our Methodology</button>
             </div>
         </div>
 
-        <!-- STORY INSIGHT: Editorial Feature -->
-        <div class="bento-card story-insight">
-            <h2 class="font-cinzel text-2xl mb-2">Stories & Insights</h2>
-            <p class="label-tiny mb-8">Intelligence meets tradition</p>
-            
-            <div class="rounded-2xl overflow-hidden h-52 mb-6 group">
-                <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+        <!-- Stats Card -->
+        <div class="card stats-card animate-in" style="animation-delay: 0.2s">
+            <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-4 opacity-60">Impact Snapshot</h3>
+            <div class="space-y-6">
+                <div>
+                    <span class="text-4xl font-cinzel font-bold">142</span>
+                    <p class="text-[10px] uppercase tracking-widest opacity-70">Cultural Dances Mapped</p>
+                </div>
+                <div>
+                    <span class="text-4xl font-cinzel font-bold">0.8ms</span>
+                    <p class="text-[10px] uppercase tracking-widest opacity-70">Robotic Response Latency</p>
+                </div>
+                <button class="mt-4 w-full py-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-2xl text-[10px] uppercase tracking-widest font-bold hover:bg-opacity-20 transition">
+                    WRO 2026 Roadmap
+                </button>
             </div>
-
-            <p class="text-[11px] text-yellow-500 font-bold uppercase tracking-widest mb-2">Technical Spotlight</p>
-            <h3 class="font-cinzel text-xl leading-tight">Teaching Grace: How MediaPipe Translates Dance</h3>
-            <p class="text-xs opacity-50 mt-4 leading-relaxed">Discover how our Observer Bot maps 33 skeletal landmarks to preserve the micro-motions of a Bomba master.</p>
-            <button class="label-tiny mt-6 border-b border-yellow-600 pb-1">Read The Full Log</button>
         </div>
 
-        <!-- MINI STORIES: Secondary List -->
-        <div class="story-mini-list">
-            <div class="bento-card p-4 flex items-center space-x-4 bg-opacity-20">
-                <img src="https://images.unsplash.com/photo-1543783333-00f244bb7867?auto=format&fit=crop&q=80&w=150" class="w-14 h-14 rounded-xl object-cover">
-                <div class="overflow-hidden">
-                    <p class="label-tiny text-[8px] mb-1">Robot Log</p>
-                    <p class="text-[11px] font-bold truncate">Dancer Bot: Inverse Kinematics V4</p>
-                    <p class="label-tiny text-[8px] mt-1 text-yellow-600">Active</p>
+        <!-- Featured Artist Stack -->
+        <div class="card featured-stack animate-in" style="animation-delay: 0.3s">
+            <div>
+                <span class="tag">Top Contributor</span>
+                <h3 class="font-cinzel text-xl">Heritage Masters</h3>
+            </div>
+            <div class="overlap-container">
+                <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 1">
+                <img src="https://images.unsplash.com/photo-1535525153412-5a42439a210d?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 2">
+                <img src="https://images.unsplash.com/photo-1543783333-00f244bb7867?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 3">
+            </div>
+            <p class="text-[10px] text-center opacity-50 italic">3,400+ hours of performance captured</p>
+        </div>
+
+        <!-- News/Insights -->
+        <div class="card side-news animate-in" style="animation-delay: 0.4s">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-cinzel text-xl">Recent Insights</h3>
+                <span class="text-[9px] uppercase font-bold opacity-30 cursor-pointer hover:opacity-100 transition">View All</span>
+            </div>
+            <div class="space-y-6">
+                <div class="group cursor-pointer">
+                    <span class="text-[10px] font-bold text-[var(--accent-purple)]">Robotics</span>
+                    <h4 class="text-sm font-semibold group-hover:underline">Mapping the Fluidity of Flamenco</h4>
+                    <p class="text-[11px] opacity-50 mt-1">Technical analysis of heel-work preservation in Dancer-Bot V4.</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <span class="text-[10px] font-bold text-[var(--accent-purple)]">Ethics</span>
+                    <h4 class="text-sm font-semibold group-hover:underline">Ownership of Motion Data</h4>
+                    <p class="text-[11px] opacity-50 mt-1">Collaborating with UNESCO on movement sovereignty.</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <span class="text-[10px] font-bold text-[var(--accent-purple)]">Events</span>
+                    <h4 class="text-sm font-semibold group-hover:underline">WRO 2026 Finals Venue</h4>
+                    <p class="text-[11px] opacity-50 mt-1">Announcement of the Future Innovators arena.</p>
                 </div>
             </div>
-            <div class="bento-card p-4 flex items-center space-x-4 bg-opacity-20">
-                <img src="https://images.unsplash.com/photo-1533331639-74f1863c7b3c?auto=format&fit=crop&q=80&w=150" class="w-14 h-14 rounded-xl object-cover">
-                <div class="overflow-hidden">
-                    <p class="label-tiny text-[8px] mb-1">Cultural Note</p>
-                    <p class="text-[11px] font-bold truncate">Bomba: The Sound of Resilience</p>
-                    <p class="label-tiny text-[8px] mt-1 opacity-40">Archived</p>
-                </div>
-            </div>
-            <div class="bento-card p-4 flex items-center space-x-4 bg-opacity-20">
-                <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=150" class="w-14 h-14 rounded-xl object-cover">
-                <div class="overflow-hidden">
-                    <p class="label-tiny text-[8px] mb-1">WRO 2026</p>
-                    <p class="text-[11px] font-bold truncate">Road to the Future Innovators</p>
-                    <p class="label-tiny text-[8px] mt-1 opacity-40">Incoming</p>
-                </div>
-            </div>
-            <div class="flex-grow flex items-center justify-center">
-                <button class="label-tiny hover:text-yellow-500 transition">View All Insights</button>
-            </div>
         </div>
 
-        <!-- HARDWARE PROMO: Merch/Product Style -->
-        <div class="bento-card hardware-promo">
-            <div class="max-w-[55%]">
-                <h2 class="font-cinzel text-3xl mb-3">EchoWeave Systems</h2>
-                <p class="text-xs opacity-50 mb-6 leading-relaxed">High-precision actuators meets cultural archival. Get the core development kit and start weaving legacy.</p>
-                <button class="btn-pill-white">Shop Hardware</button>
+        <!-- Hardware Promo -->
+        <div class="card promo-bar animate-in" style="animation-delay: 0.5s">
+            <div class="flex items-center space-x-6">
+                <div class="w-16 h-16 rounded-2xl bg-[var(--accent-purple)] flex items-center justify-center text-white font-cinzel text-2xl">
+                    EW
+                </div>
+                <div>
+                    <h3 class="font-cinzel text-lg">EchoWeave Core Kit</h3>
+                    <p class="text-xs opacity-50">Educational robotics for cultural preservation.</p>
+                </div>
             </div>
-            <div class="relative group">
-                <div class="absolute inset-0 bg-yellow-500 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition"></div>
-                <img src="https://images.unsplash.com/photo-1531746790731-6c307f0c6558?auto=format&fit=crop&q=80&w=400" class="w-44 h-44 object-cover rounded-full border-[6px] border-black shadow-2xl grayscale group-hover:grayscale-0 transition duration-700">
-            </div>
+            <button class="btn-action">Pre-order Kit</button>
         </div>
 
-        <!-- CATEGORY GRID: Full Width -->
-        <div class="category-grid">
-            <div class="bento-card cat-card" style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=500')">
-                <span class="font-cinzel text-xl tracking-widest">Classical Masters</span>
+        <!-- Categories (Grid within Grid) -->
+        <div class="col-span-full grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Classical</h4>
             </div>
-            <div class="bento-card cat-card" style="background-image: url('https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&q=80&w=500')">
-                <span class="font-cinzel text-xl tracking-widest">Folk Traditions</span>
+            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Folk Traditions</h4>
             </div>
-            <div class="bento-card cat-card" style="background-image: url('https://images.unsplash.com/photo-1496293455970-f8581aae0e3c?auto=format&fit=crop&q=80&w=500')">
-                <span class="font-cinzel text-xl tracking-widest">Contemporary Echo</span>
+            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1496293455970-f8581aae0e3c?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Contemporary</h4>
             </div>
-            <div class="bento-card cat-card" style="background-image: url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=500')">
-                <span class="font-cinzel text-xl tracking-widest">Ritual Motion</span>
+            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Ritual Motion</h4>
             </div>
         </div>
 
     </main>
 
-    <footer class="mt-32 py-16 px-10 border-t border-white border-opacity-5">
-        <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center opacity-30">
-            <div class="font-cinzel text-lg font-bold">ECHOWEAVE</div>
-            <p class="label-tiny mt-4 md:mt-0">Built for WRO 2026 Future Innovators • World Heritage Robotic Archive</p>
-            <div class="flex space-x-8 mt-6 md:mt-0 label-tiny tracking-widest">
-                <a href="#" class="hover:text-white transition">Privacy</a>
-                <a href="#" class="hover:text-white transition">Archive</a>
-                <a href="#" class="hover:text-white transition">Hardware</a>
-            </div>
-        </div>
+    <footer class="mt-20 py-16 px-8 border-t border-[var(--border-color)] text-center">
+        <div class="font-cinzel text-xl font-bold opacity-30 mb-4">ECHOWEAVE</div>
+        <p class="text-[10px] uppercase tracking-[0.4em] opacity-40">Preserving Legacy • Forging Future</p>
     </footer>
 
+    <script>
+        // Theme Engine
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        const body = document.body;
+
+        const sunSVG = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`;
+        const moonSVG = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />`;
+
+        function setTheme(isDark) {
+            if (isDark) {
+                body.classList.replace('light', 'dark');
+                themeIcon.innerHTML = sunSVG;
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.replace('dark', 'light');
+                themeIcon.innerHTML = moonSVG;
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        themeBtn.addEventListener('click', () => {
+            setTheme(body.classList.contains('light'));
+        });
+
+        // Initialize theme from storage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') setTheme(true);
+
+        // Simple Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
