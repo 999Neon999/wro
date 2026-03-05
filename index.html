@@ -128,6 +128,7 @@
             font-weight: 600;
             font-size: 0.875rem;
             transition: all 0.3s ease;
+            display: inline-block;
         }
 
         .btn-action:hover {
@@ -187,13 +188,13 @@
 
     <!-- Navbar -->
     <nav class="flex justify-between items-center px-8 py-6 max-w-[1400px] mx-auto sticky top-0 z-50 backdrop-blur-md bg-opacity-70">
-        <div class="font-cinzel text-2xl font-bold tracking-tighter">
+        <div class="font-cinzel text-2xl font-bold tracking-tighter cursor-pointer" onclick="window.location.href='index.html'">
             ECHOWEAVE<span style="color: var(--accent-purple)">.</span>
         </div>
         
         <div class="hidden md:flex space-x-10 text-[10px] uppercase tracking-[0.2em] font-bold opacity-70">
-            <a href="#" class="hover:text-[var(--accent-purple)] transition">Project</a>
-            <a href="#" class="hover:text-[var(--accent-purple)] transition">CultureDex</a>
+            <a href="index.html" class="hover:text-[var(--accent-purple)] transition">Project</a>
+            <a href="CultureDex/index.html" class="hover:text-[var(--accent-purple)] transition">CultureDex</a>
             <a href="#" class="hover:text-[var(--accent-purple)] transition">Robots</a>
             <a href="#" class="hover:text-[var(--accent-purple)] transition">WRO 2026</a>
         </div>
@@ -224,7 +225,7 @@
                 Building a bridge between ancestral dance and future robotics. We use high-precision motion capture to teach legacy to machines.
             </p>
             <div class="flex space-x-4">
-                <button class="btn-action">Enter the Archive</button>
+                <a href="CultureDex/index.html" class="btn-action">Enter the Archive</a>
                 <button class="px-6 py-3 text-xs font-bold uppercase tracking-widest border-b border-current opacity-40 hover:opacity-100 transition">Our Methodology</button>
             </div>
         </div>
@@ -258,7 +259,7 @@
                 <img src="https://images.unsplash.com/photo-1535525153412-5a42439a210d?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 2">
                 <img src="https://images.unsplash.com/photo-1543783333-00f244bb7867?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 3">
             </div>
-            <p class="text-[10px] text-center opacity-50 italic">3,400+ hours of performance captured</p>
+            <a href="CultureDex/index.html" class="text-[10px] text-center opacity-50 italic hover:opacity-100 underline transition">Browse CultureDex Contributors</a>
         </div>
 
         <!-- News/Insights -->
@@ -302,16 +303,16 @@
 
         <!-- Categories (Grid within Grid) -->
         <div class="col-span-full grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
                 <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Classical</h4>
             </div>
-            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
                 <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Folk Traditions</h4>
             </div>
-            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1496293455970-f8581aae0e3c?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1496293455970-f8581aae0e3c?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
                 <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Contemporary</h4>
             </div>
-            <div class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
+            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
                 <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Ritual Motion</h4>
             </div>
         </div>
