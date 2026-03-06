@@ -8,96 +8,168 @@
 </head>
 <body>
 
-  <!-- ══ HERO ══ -->
-  <section class="hero">
-    <canvas id="heroCanvas"></canvas>
-    <div class="hero-eyebrow">A Curated Encyclopedia</div>
-    <h1 class="hero-title">
-      <span class="line1">World</span>
-      <span class="line2">Dance</span>
-      <span class="line3">Atlas</span>
-    </h1>
-    <p class="hero-sub">
-      Twenty-four living traditions from every corner of the globe — each a universe of movement, memory, and meaning.
-    </p>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-num" data-target="24">0</span>
-        <span class="stat-label">Traditions</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num" data-target="6">0</span>
-        <span class="stat-label">Continents</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num" data-target="4">0</span>
-        <span class="stat-label">Rarities</span>
-      </div>
+  <!-- ══ CURSOR ══ -->
+  <div class="custom-cursor" id="customCursor"></div>
+  <div class="cursor-trail" id="cursorTrail"></div>
+
+  <!-- ══ LOADER ══ -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-inner">
+      <div class="loader-symbol">⟳</div>
+      <div class="loader-text">Loading Atlas</div>
+      <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
     </div>
+  </div>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-grain"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        A Curated Encyclopedia
+        <span class="eyebrow-line"></span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="line1" data-text="World">World</span>
+        <span class="line2" data-text="Dance">Dance</span>
+        <span class="line3" data-text="Atlas">Atlas</span>
+      </h1>
+
+      <p class="hero-sub">
+        Twenty-four living traditions from every corner of the globe —<br>
+        each a universe of movement, memory, and meaning.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num" data-target="24">0</span>
+          <span class="stat-label">Traditions</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="6">0</span>
+          <span class="stat-label">Continents</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="4">0</span>
+          <span class="stat-label">Rarities</span>
+        </div>
+      </div>
+
+      <button class="hero-cta" onclick="document.querySelector('.controls').scrollIntoView({behavior:'smooth'})">
+        <span>Explore the Atlas</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+      </button>
+    </div>
+
     <div class="scroll-cue">
       <div class="scroll-line"></div>
-      Scroll to explore
+      <span>Scroll</span>
     </div>
+
+    <!-- Floating region badges -->
+    <div class="float-badges" id="floatBadges"></div>
   </section>
 
   <!-- ══ CONTROLS ══ -->
-  <div class="controls">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" class="search-input" placeholder="Search dances, regions…" autocomplete="off">
+  <div class="controls" id="controls">
+    <div class="controls-inner">
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search dances, regions, types…" autocomplete="off">
+        <button class="search-clear" id="searchClear" aria-label="Clear search">✕</button>
+      </div>
+
+      <div class="controls-divider"></div>
+
+      <div class="filter-group">
+        <span class="filter-label">Type</span>
+        <div class="pills" id="typePills">
+          <button class="pill active" data-filter-type="all">All</button>
+          <button class="pill" data-filter-type="Classical">Classical</button>
+          <button class="pill" data-filter-type="Semi-Classical">Semi-Classical</button>
+          <button class="pill" data-filter-type="Folk">Folk</button>
+          <button class="pill" data-filter-type="Contemporary">Contemporary</button>
+          <button class="pill" data-filter-type="Street">Street</button>
+          <button class="pill" data-filter-type="Ceremonial">Ceremonial</button>
+        </div>
+      </div>
+
+      <div class="controls-right">
+        <div class="view-toggles">
+          <button class="view-btn active" id="viewGrid" title="Grid view">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="view-btn" id="viewList" title="List view">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+        </div>
+
+        <select class="sort-select" id="sortSelect">
+          <option value="default">Default order</option>
+          <option value="alpha-asc">A → Z</option>
+          <option value="alpha-desc">Z → A</option>
+          <option value="rarity-asc">Common first</option>
+          <option value="rarity-desc">Legendary first</option>
+          <option value="skill-asc">Beginner first</option>
+          <option value="skill-desc">Master first</option>
+        </select>
+
+        <span class="results-count" id="resultsCount">24 dances</span>
+      </div>
     </div>
-    <div class="sep"></div>
-    <span class="filter-label">Type</span>
-    <div class="pills">
-      <button class="pill active" data-filter-type="all">All</button>
-      <button class="pill" data-filter-type="Classical">Classical</button>
-      <button class="pill" data-filter-type="Semi-Classical">Semi-Classical</button>
-      <button class="pill" data-filter-type="Folk">Folk</button>
-      <button class="pill" data-filter-type="Contemporary">Contemporary</button>
-      <button class="pill" data-filter-type="Street">Street</button>
-      <button class="pill" data-filter-type="Ceremonial">Ceremonial</button>
-    </div>
-    <select class="sort-select" id="sortSelect">
-      <option value="default">Default order</option>
-      <option value="alpha-asc">A → Z</option>
-      <option value="alpha-desc">Z → A</option>
-      <option value="rarity-asc">Rarity: Common first</option>
-      <option value="rarity-desc">Rarity: Legendary first</option>
-      <option value="skill-asc">Skill: Beginner first</option>
-      <option value="skill-desc">Skill: Master first</option>
-    </select>
-    <span class="results-count" id="resultsCount">24 dances</span>
   </div>
 
   <!-- ══ GRID ══ -->
-  <div class="grid-container">
+  <div class="grid-container" id="gridContainer">
     <div class="section-bar">
       <span class="section-title" id="sectionTitle">All Dance Forms</span>
+      <div class="section-legend">
+        <span class="legend-item"><span class="pip pip-common"></span>Common</span>
+        <span class="legend-item"><span class="pip pip-uncommon"></span>Uncommon</span>
+        <span class="legend-item"><span class="pip pip-rare"></span>Rare</span>
+        <span class="legend-item"><span class="pip pip-legendary"></span>Legendary</span>
+      </div>
     </div>
     <div class="dance-grid" id="danceGrid"></div>
   </div>
 
   <!-- ══ THEME TOGGLE ══ -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode">🌙</button>
+  <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode">
+    <span class="theme-icon-sun">☀️</span>
+    <span class="theme-icon-moon">🌙</span>
+  </button>
+
+  <!-- ══ BACK TO TOP ══ -->
+  <button class="back-top" id="backTop" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
 
   <!-- ══ MODAL ══ -->
-  <div class="modal-overlay" id="modalOverlay">
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
     <div class="modal" id="modalEl">
       <div class="modal-banner" id="modalBanner"></div>
       <div class="modal-body">
-        <div class="modal-eyebrow"     id="modalEyebrow"></div>
-        <div class="modal-title"       id="modalTitle"></div>
-        <div class="modal-origin-line" id="modalOriginLine"></div>
-        <div class="modal-badges-row"  id="modalBadgesRow"></div>
+        <div class="modal-header-meta">
+          <div class="modal-eyebrow" id="modalEyebrow"></div>
+          <div class="modal-title" id="modalTitle"></div>
+          <div class="modal-origin-line" id="modalOriginLine"></div>
+        </div>
+        <div class="modal-badges-row" id="modalBadgesRow"></div>
         <div class="modal-divider"></div>
         <div class="modal-section-label">About this Dance</div>
-        <p class="modal-description"   id="modalDesc"></p>
+        <p class="modal-description" id="modalDesc"></p>
         <div class="modal-divider"></div>
         <div class="modal-section-label">Key Facts</div>
-        <div class="modal-facts"       id="modalFacts"></div>
+        <div class="modal-facts" id="modalFacts"></div>
         <div class="modal-divider"></div>
         <div class="modal-section-label">Similar Dance Forms</div>
-        <div class="similar-grid"      id="modalSimilar"></div>
+        <div class="similar-grid" id="modalSimilar"></div>
       </div>
     </div>
   </div>
