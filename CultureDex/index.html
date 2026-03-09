@@ -9,38 +9,65 @@
 <body>
 
   <!-- ══ CURSOR ══ -->
-  <div class="custom-cursor" id="customCursor"></div>
+  <div class="custom-cursor" id="customCursor">
+    <div class="cursor-dot"></div>
+  </div>
   <div class="cursor-trail" id="cursorTrail"></div>
 
   <!-- ══ LOADER ══ -->
   <div class="page-loader" id="pageLoader">
     <div class="loader-inner">
-      <div class="loader-symbol">⟳</div>
-      <div class="loader-text">Loading Atlas</div>
+      <div class="loader-glyph">
+        <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="30" cy="30" r="26" stroke-dasharray="4 6" opacity="0.3"/>
+          <path d="M30 10 Q40 22 30 30 Q20 38 30 50" stroke-linecap="round"/>
+          <circle cx="30" cy="30" r="3" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="loader-text">World Dance Atlas</div>
       <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+      <div class="loader-sub">Loading 24 traditions</div>
     </div>
   </div>
 
   <!-- ══ HERO ══ -->
   <section class="hero" id="hero">
     <canvas id="heroCanvas"></canvas>
-    <div class="hero-grain"></div>
+    <div class="hero-vignette"></div>
+
+    <nav class="hero-nav">
+      <div class="nav-logo">
+        <svg width="20" height="20" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="30" cy="30" r="26" stroke-dasharray="4 6" opacity="0.4"/>
+          <path d="M30 10 Q40 22 30 30 Q20 38 30 50" stroke-linecap="round"/>
+          <circle cx="30" cy="30" r="3" fill="currentColor"/>
+        </svg>
+        <span>WDA</span>
+      </div>
+      <div class="nav-links">
+        <button onclick="document.querySelector('.controls').scrollIntoView({behavior:'smooth'})">Explore</button>
+        <button id="themeToggle" title="Toggle theme">
+          <span class="theme-icon-sun">☀️</span>
+          <span class="theme-icon-moon">🌙</span>
+        </button>
+      </div>
+    </nav>
 
     <div class="hero-content">
       <div class="hero-eyebrow">
-        <span class="eyebrow-line"></span>
-        A Curated Encyclopedia
-        <span class="eyebrow-line"></span>
+        <span class="eyebrow-dot"></span>
+        A living encyclopedia of movement
+        <span class="eyebrow-dot"></span>
       </div>
 
       <h1 class="hero-title">
-        <span class="line1" data-text="World">World</span>
-        <span class="line2" data-text="Dance">Dance</span>
-        <span class="line3" data-text="Atlas">Atlas</span>
+        <span class="line-world">World</span>
+        <span class="line-dance">Dance</span>
+        <span class="line-atlas">Atlas</span>
       </h1>
 
       <p class="hero-sub">
-        Twenty-four living traditions from every corner of the globe —<br>
+        Twenty-four living traditions from every corner of the globe —
         each a universe of movement, memory, and meaning.
       </p>
 
@@ -59,12 +86,23 @@
           <span class="stat-num" data-target="4">0</span>
           <span class="stat-label">Rarities</span>
         </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="3000">0</span>
+          <span class="stat-label">Years of history</span>
+        </div>
       </div>
 
-      <button class="hero-cta" onclick="document.querySelector('.controls').scrollIntoView({behavior:'smooth'})">
-        <span>Explore the Atlas</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-      </button>
+      <div class="hero-actions">
+        <button class="hero-cta" onclick="document.querySelector('.controls').scrollIntoView({behavior:'smooth'})">
+          <span>Explore Atlas</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </button>
+        <button class="hero-cta-ghost" id="randomDanceBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+          <span>Surprise Me</span>
+        </button>
+      </div>
     </div>
 
     <div class="scroll-cue">
@@ -72,7 +110,6 @@
       <span>Scroll</span>
     </div>
 
-    <!-- Floating region badges -->
     <div class="float-badges" id="floatBadges"></div>
   </section>
 
@@ -80,48 +117,195 @@
   <div class="controls" id="controls">
     <div class="controls-inner">
       <div class="search-wrap">
-        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search dances, regions, types…" autocomplete="off">
-        <button class="search-clear" id="searchClear" aria-label="Clear search">✕</button>
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search dance, region, type…" autocomplete="off">
+        <kbd class="search-kbd">/</kbd>
+        <button class="search-clear" id="searchClear" aria-label="Clear">✕</button>
       </div>
 
       <div class="controls-divider"></div>
 
       <div class="filter-group">
         <span class="filter-label">Type</span>
-        <div class="pills" id="typePills">
-          <button class="pill active" data-filter-type="all">All</button>
-          <button class="pill" data-filter-type="Classical">Classical</button>
-          <button class="pill" data-filter-type="Semi-Classical">Semi-Classical</button>
-          <button class="pill" data-filter-type="Folk">Folk</button>
-          <button class="pill" data-filter-type="Contemporary">Contemporary</button>
-          <button class="pill" data-filter-type="Street">Street</button>
-          <button class="pill" data-filter-type="Ceremonial">Ceremonial</button>
+        <div class="pills-track" id="pillsTrack">
+          <button class="scroll-arrow scroll-arrow-left" id="pillsScrollLeft" aria-label="Scroll left" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="pills" id="typePills">
+            <button class="pill active" data-filter-type="all">All</button>
+            <button class="pill" data-filter-type="Classical">Classical</button>
+            <button class="pill" data-filter-type="Semi-Classical">Semi-Classical</button>
+            <button class="pill" data-filter-type="Folk">Folk</button>
+            <button class="pill" data-filter-type="Contemporary">Contemporary</button>
+            <button class="pill" data-filter-type="Street">Street</button>
+            <button class="pill" data-filter-type="Ceremonial">Ceremonial</button>
+          </div>
+          <button class="scroll-arrow scroll-arrow-right" id="pillsScrollRight" aria-label="Scroll right" tabindex="-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
       </div>
 
       <div class="controls-right">
+        <!-- Filter toggle button -->
+        <button class="filter-toggle-btn" id="filterToggleBtn" aria-expanded="false" title="Advanced filters">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          <span>Filters</span>
+          <span class="filter-active-count" id="filterActiveCount" hidden>0</span>
+        </button>
+
+        <div class="controls-divider-v"></div>
+
         <div class="view-toggles">
           <button class="view-btn active" id="viewGrid" title="Grid view">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           </button>
           <button class="view-btn" id="viewList" title="List view">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           </button>
         </div>
 
-        <select class="sort-select" id="sortSelect">
-          <option value="default">Default order</option>
-          <option value="alpha-asc">A → Z</option>
-          <option value="alpha-desc">Z → A</option>
-          <option value="rarity-asc">Common first</option>
-          <option value="rarity-desc">Legendary first</option>
-          <option value="skill-asc">Beginner first</option>
-          <option value="skill-desc">Master first</option>
-        </select>
+        <!-- Custom Sort Dropdown -->
+        <div class="sort-dropdown" id="sortDropdown" role="combobox" aria-haspopup="listbox" aria-expanded="false">
+          <button class="sort-trigger" id="sortTrigger" aria-label="Sort options">
+            <svg class="sort-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/>
+            </svg>
+            <span class="sort-label" id="sortLabel">Default order</span>
+            <svg class="sort-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="sort-panel" id="sortPanel" role="listbox">
+            <div class="sort-panel-header">Sort by</div>
+            <div class="sort-group">
+              <div class="sort-group-label">Name</div>
+              <button class="sort-option active" data-sort="default" role="option">
+                <span class="sort-option-icon">◈</span>
+                <span>Default order</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <button class="sort-option" data-sort="alpha-asc" role="option">
+                <span class="sort-option-icon">A→Z</span>
+                <span>Alphabetical</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <button class="sort-option" data-sort="alpha-desc" role="option">
+                <span class="sort-option-icon">Z→A</span>
+                <span>Reverse alpha</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+            <div class="sort-group">
+              <div class="sort-group-label">Rarity</div>
+              <button class="sort-option" data-sort="rarity-asc" role="option">
+                <span class="sort-option-icon pip pip-common"></span>
+                <span>Common first</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <button class="sort-option" data-sort="rarity-desc" role="option">
+                <span class="sort-option-icon pip pip-legendary"></span>
+                <span>Legendary first</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+            <div class="sort-group">
+              <div class="sort-group-label">Skill level</div>
+              <button class="sort-option" data-sort="skill-asc" role="option">
+                <span class="sort-option-icon">☽</span>
+                <span>Beginner first</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <button class="sort-option" data-sort="skill-desc" role="option">
+                <span class="sort-option-icon">☀</span>
+                <span>Master first</span>
+                <svg class="sort-check" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <span class="results-count" id="resultsCount">24 dances</span>
       </div>
+    </div>
+  </div>
+
+  <!-- ══ FILTER DRAWER ══ -->
+  <div class="filter-drawer" id="filterDrawer" aria-hidden="true">
+    <div class="filter-drawer-inner">
+      <div class="filter-drawer-scroll">
+      <div class="filter-col">
+        <div class="fd-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Region
+        </div>
+        <div class="chips-track" id="regionTrack">
+          <button class="scroll-arrow scroll-arrow-left" data-track="regionChips" aria-label="Scroll left" tabindex="-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="fd-chips" id="regionChips"></div>
+          <button class="scroll-arrow scroll-arrow-right" data-track="regionChips" aria-label="Scroll right" tabindex="-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="filter-col-divider"></div>
+      <div class="filter-col">
+        <div class="fd-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Rarity
+        </div>
+        <div class="chips-track" id="rarityTrack">
+          <button class="scroll-arrow scroll-arrow-left" data-track="rarityChips" aria-label="Scroll left" tabindex="-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="fd-chips" id="rarityChips">
+            <button class="fd-chip" data-filter-rarity="Common"><span class="pip pip-common"></span>Common</button>
+            <button class="fd-chip" data-filter-rarity="Uncommon"><span class="pip pip-uncommon"></span>Uncommon</button>
+            <button class="fd-chip" data-filter-rarity="Rare"><span class="pip pip-rare"></span>Rare</button>
+            <button class="fd-chip" data-filter-rarity="Legendary"><span class="pip pip-legendary"></span>Legendary</button>
+          </div>
+          <button class="scroll-arrow scroll-arrow-right" data-track="rarityChips" aria-label="Scroll right" tabindex="-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="filter-col-divider"></div>
+      <div class="filter-col">
+        <div class="fd-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          Skill level
+        </div>
+        <div class="chips-track" id="skillTrack">
+          <button class="scroll-arrow scroll-arrow-left" data-track="skillChips" aria-label="Scroll left" tabindex="-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="fd-chips" id="skillChips">
+            <button class="fd-chip" data-filter-skill="Beginner"><span class="skill-pip skill-beginner"></span>Beginner</button>
+            <button class="fd-chip" data-filter-skill="Intermediate"><span class="skill-pip skill-intermediate"></span>Intermediate</button>
+            <button class="fd-chip" data-filter-skill="Advanced"><span class="skill-pip skill-advanced"></span>Advanced</button>
+            <button class="fd-chip" data-filter-skill="Master"><span class="skill-pip skill-master"></span>Master</button>
+          </div>
+          <button class="scroll-arrow scroll-arrow-right" data-track="skillChips" aria-label="Scroll right" tabindex="-1">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="filter-col-divider"></div>
+      <div class="filter-col filter-col-extras">
+        <div class="fd-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Special
+        </div>
+        <div class="fd-chips">
+          <button class="fd-chip" data-filter-special="unesco"><span class="special-pip">🏛</span>UNESCO</button>
+        </div>
+        <button class="fd-clear-btn" id="fdClearBtn">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Clear all
+        </button>
+      </div>
+      </div><!-- /.filter-drawer-scroll -->
     </div>
   </div>
 
@@ -139,35 +323,69 @@
     <div class="dance-grid" id="danceGrid"></div>
   </div>
 
-  <!-- ══ THEME TOGGLE ══ -->
-  <button class="theme-toggle" id="themeToggle" title="Toggle dark / light mode">
-    <span class="theme-icon-sun">☀️</span>
-    <span class="theme-icon-moon">🌙</span>
-  </button>
-
   <!-- ══ BACK TO TOP ══ -->
   <button class="back-top" id="backTop" title="Back to top">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
   </button>
 
   <!-- ══ MODAL ══ -->
   <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
     <div class="modal" id="modalEl">
-      <div class="modal-banner" id="modalBanner"></div>
+
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <!-- Banner with image -->
+      <div class="modal-banner" id="modalBanner">
+        <div class="modal-banner-gradient" id="modalBannerGradient"></div>
+        <img class="modal-img" id="modalImg" alt="" loading="eager">
+        <div class="modal-img-overlay"></div>
+        <div class="modal-rhythm" id="modalRhythm"></div>
+        <div class="modal-banner-text">
+          <div class="modal-banner-meta" id="modalBannerMeta"></div>
+          <div class="modal-banner-name" id="modalBannerName"></div>
+        </div>
+      </div>
+
+      <!-- Navigation between dances -->
+      <div class="modal-nav">
+        <button class="modal-nav-btn" id="modalPrev">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Prev</span>
+        </button>
+        <div class="modal-progress" id="modalProgress"></div>
+        <button class="modal-nav-btn" id="modalNext">
+          <span>Next</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <!-- Body -->
       <div class="modal-body">
         <div class="modal-header-meta">
           <div class="modal-eyebrow" id="modalEyebrow"></div>
           <div class="modal-title" id="modalTitle"></div>
           <div class="modal-origin-line" id="modalOriginLine"></div>
         </div>
+
         <div class="modal-badges-row" id="modalBadgesRow"></div>
+
         <div class="modal-divider"></div>
+
         <div class="modal-section-label">About this Dance</div>
         <p class="modal-description" id="modalDesc"></p>
+
         <div class="modal-divider"></div>
+
         <div class="modal-section-label">Key Facts</div>
         <div class="modal-facts" id="modalFacts"></div>
+
+        <!-- Cultural significance meter -->
+        <div class="modal-significance" id="modalSignificance"></div>
+
         <div class="modal-divider"></div>
+
         <div class="modal-section-label">Similar Dance Forms</div>
         <div class="similar-grid" id="modalSimilar"></div>
       </div>
