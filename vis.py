@@ -9,9 +9,7 @@ CSV_PATH = "pose_keypoints.csv"
 OUTPUT_DIR = Path("pose_visualizations_2d")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-NUM_PLOTS = 6  # Show a few more since 2D is fast
-
-# MediaPipe connections
+# MediaPipe pose connections
 POSE_CONNECTIONS = [
     (0,1), (1,2), (2,3), (3,7), (0,4), (4,5), (5,6), (6,8),
     (9,10),
@@ -40,43 +38,44 @@ def plot_2d_pose(row, save_path=None):
     plt.scatter(xs_vis, ys_vis, c='blue', s=100, label=f'Keypoints ({np.sum(visible)}/33)')
 
     for p1, p2 in POSE_CONNECTIONS:
-        if vis[p1] > 0.1 and vis[p2] > 0.1:
-            plt.plot(
-                [xs[p1], xs[p2]],
-                [-ys[p1], -ys[p2]],
-                'r-', linewidth=3
-            )
+        if p1 < len(vis) and p2 < len(vis):
+            if vis[p1] > 0.1 and vis[p2] > 0.1:
+                plt.plot(
+                    [xs[p1], xs[p2]],
+                    [-ys[p1], -ys[p2]],
+                    'r-', linewidth=3
+                )
 
     plt.title(f"{row['class']} - {row['image']}\nVisible keypoints: {np.sum(visible)}/33")
-    plt.xlabel('X')
-    plt.ylabel('Y (flipped upright)')
     plt.gca().invert_yaxis()  # head at top
     plt.grid(True, alpha=0.3)
-    plt.legend(loc='upper right')
 
     if save_path:
         plt.savefig(save_path, dpi=200, bbox_inches='tight')
         print(f"Saved 2D plot: {save_path}")
-
-    plt.show()
+    
     plt.close()
 
 if __name__ == "__main__":
+    if not Path(CSV_PATH).exists():
+        print(f"Error: {CSV_PATH} not found!")
+        exit(1)
+
     print("Loading data...")
     df = pd.read_csv(CSV_PATH)
     print(f"Loaded {len(df)} records")
     print(df['class'].value_counts())
 
-    # Select diverse examples
-    samples = pd.concat([
-        df[df['class'] == 'Nataraj'].sample(min(2, len(df[df['class'] == 'Nataraj']))),
-        df[df['class'] == 'Muzhumandi'].sample(min(1, len(df[df['class'] == 'Muzhumandi']))),
-        df[df['class'] == 'Nagabandham'].sample(min(1, len(df[df['class'] == 'Nagabandham']))),
-        df[df['class'] == 'Samapadam'].sample(min(1, len(df[df['class'] == 'Samapadam']))),
-        df[df['class'] == 'Ardhamandalam'].sample(min(1, len(df[df['class'] == 'Ardhamandalam'])))
-    ])
+    # Select samples across available classes
+    available_classes = df['class'].unique()
+    samples = []
+    for cls in available_classes:
+        class_samples = df[df['class'] == cls]
+        samples.append(class_samples.sample(min(2, len(class_samples))))
+    
+    samples_df = pd.concat(samples)
 
-    for idx, row in samples.iterrows():
+    for idx, row in samples_df.iterrows():
         print(f"\nPlotting: {row['class']} - {row['image']}")
-        save_path = OUTPUT_DIR / f"2d_{row['image'].replace('.jpg', '')}.png"
+        save_path = OUTPUT_DIR / f"2d_{row['image'].replace('.jpg', '').replace('.png', '')}.png"
         plot_2d_pose(row, save_path=save_path)

@@ -9,12 +9,17 @@ import numpy as np
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(static_image_mode=True, model_complexity=2)
 
-DATASET_DIR = Path("./new_Dataset")
+# Pointing to the new IDC dataset
+DATASET_DIR = Path("Datasets/idc/train")
 OUTPUT_CSV = "pose_keypoints.csv"
 OUTPUT_JSON_DIR = Path("keypoints_json")
 OUTPUT_JSON_DIR.mkdir(exist_ok=True)
 
 data_rows = []
+
+if not DATASET_DIR.exists():
+    print(f"Error: {DATASET_DIR} not found!")
+    exit(1)
 
 for class_folder in DATASET_DIR.iterdir():
     if not class_folder.is_dir():
@@ -23,7 +28,8 @@ for class_folder in DATASET_DIR.iterdir():
 
     print(f"Processing class: {class_name}")
 
-    for img_path in class_folder.glob("*.jpg"):
+    # IDC train set contains .png and .jpg files
+    for img_path in class_folder.glob("*.[jp][pn][g]"):
         image = cv2.imread(str(img_path))
         if image is None:
             continue
@@ -60,4 +66,5 @@ for class_folder in DATASET_DIR.iterdir():
 df = pd.DataFrame(data_rows)
 df.to_csv(OUTPUT_CSV, index=False)
 print(f"\nSaved {len(df)} pose records to {OUTPUT_CSV}")
-print(df['class'].value_counts())  # Class distribution
+if not df.empty:
+    print(df['class'].value_counts())  # Class distribution
