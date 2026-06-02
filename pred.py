@@ -11,7 +11,7 @@ if not pd.io.common.file_exists(CSV_PATH):
     print(f"Error: {CSV_PATH} not found. Run test.py first!")
     exit(1)
 
-df = pd.read_csv(CSV_PATH)wd
+df = pd.read_csv(CSV_PATH)
 
 # Features: all feat_ columns
 X = df[[f"feat_{i}" for i in range(132)]]
