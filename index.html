@@ -3,326 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EchoWeave | The Future of Cultural Motion</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>EchoWeave</title>
     <style>
-        :root {
-            /* Light Mode - Claude / Stone Palette */
-            --bg-primary: #f8f6f2;
-            --bg-card: rgba(255, 255, 255, 0.8);
-            --text-main: #1a1a1a;
-            --text-muted: #6b7280;
-            --accent-purple: #7c3aed;
-            --accent-gold: #b48a3d;
-            --border-color: rgba(0, 0, 0, 0.08);
-            --glass-blur: 12px;
-            --hero-overlay: linear-gradient(to top, #f8f6f2 5%, transparent 60%);
-        }
-
-        .dark {
-            /* Dark Mode - Obsidian Palette */
-            --bg-primary: #050505;
-            --bg-card: rgba(18, 18, 18, 0.8);
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --accent-purple: #a78bfa;
-            --accent-gold: #fbbf24;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --hero-overlay: linear-gradient(to top, #050505 5%, transparent 60%);
-        }
-
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-
-        .font-cinzel { font-family: 'Cinzel', serif; }
-
-        /* Bento Grid */
-        .bento-container {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-auto-rows: minmax(100px, auto);
-            gap: 1.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
         .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--border-color);
-            border-radius: 32px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                        box-shadow 0.4s ease, border-color 0.4s ease;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-
         .card:hover {
-            transform: translateY(-8px) scale(1.01);
-            border-color: var(--accent-purple);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
-
-        /* Hero Styling */
-        .hero-card {
-            grid-column: span 8;
-            grid-row: span 6;
-            background-image: var(--hero-overlay), url('https://images.unsplash.com/photo-1547394765-185e1e68f34e?auto=format&fit=crop&q=80&w=1200');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 4rem;
+        .card h4 {
+            margin-top: 16px;
+            color: #333;
         }
-
-        .stats-card {
-            grid-column: span 4;
-            grid-row: span 3;
-            padding: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--accent-purple), #4c1d95);
+        .card p {
+            color: #666;
+        }
+        .footer {
+            background-color: #333;
             color: white;
-            border: none;
+            text-align: center;
+            padding: 10px 0;
         }
-
-        .featured-stack {
-            grid-column: span 4;
-            grid-row: span 3;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .footer a {
+            color: white;
+            text-decoration: none;
         }
-
-        .side-news {
-            grid-column: span 4;
-            grid-row: span 4;
-            padding: 2rem;
+        .footer a:hover {
+            text-decoration: underline;
         }
-
-        .promo-bar {
-            grid-column: span 8;
-            grid-row: span 2;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-        }
-
-        /* Interactive Elements */
-        .btn-action {
-            background: var(--text-main);
-            color: var(--bg-primary);
-            padding: 0.75rem 2rem;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-action:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .tag {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-weight: 700;
-            color: var(--accent-purple);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        /* Image Overlap Logic */
-        .overlap-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1.5rem 0;
-        }
-        .overlap-img {
-            width: 90px;
-            height: 120px;
-            border-radius: 16px;
-            border: 4px solid var(--bg-card);
-            object-fit: cover;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-        .overlap-img:not(:first-child) { margin-left: -2rem; }
-        .overlap-img:hover { z-index: 10; transform: scale(1.2) rotate(-3deg); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
-
-        @media (max-width: 1024px) {
-            .bento-container { display: flex; flex-direction: column; }
-            .hero-card { height: 500px; padding: 2rem; }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-in { animation: fadeIn 0.8s ease forwards; }
     </style>
 </head>
-<body class="light">
-
-    <!-- Navbar -->
-    <nav class="flex justify-between items-center px-8 py-6 max-w-[1400px] mx-auto sticky top-0 z-50 backdrop-blur-md bg-opacity-70">
-        <div class="font-cinzel text-2xl font-bold tracking-tighter cursor-pointer" onclick="window.location.href='index.html'">
-            ECHOWEAVE<span style="color: var(--accent-purple)">.</span>
-        </div>
-        
-        <div class="hidden md:flex space-x-10 text-[10px] uppercase tracking-[0.2em] font-bold opacity-70">
-            <a href="index.html" class="hover:text-[var(--accent-purple)] transition">Project</a>
-            <a href="CultureDex/index.html" class="hover:text-[var(--accent-purple)] transition">CultureDex</a>
-            <a href="#" class="hover:text-[var(--accent-purple)] transition">Robots</a>
-            <a href="#" class="hover:text-[var(--accent-purple)] transition">WRO 2026</a>
-        </div>
-
-        <div class="flex items-center space-x-6">
-            <!-- Theme Toggle -->
-            <button id="theme-btn" class="p-2 rounded-full hover:bg-black hover:bg-opacity-5 transition">
-                <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                </svg>
-            </button>
-            <div class="h-6 w-[1px] bg-gray-300"></div>
-            <button class="text-xs font-bold uppercase tracking-widest px-4 py-2 border border-current rounded-full hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition">
-                Contact
-            </button>
-        </div>
-    </nav>
-
-    <main class="bento-container">
-        
-        <!-- Hero Section -->
-        <div class="card hero-card animate-in" style="animation-delay: 0.1s">
-            <span class="tag" style="color: var(--accent-gold)">Featured Initiative</span>
-            <h1 class="font-cinzel text-6xl md:text-7xl font-bold mb-6 leading-[0.9]">
-                Preserving <br><span class="italic font-light opacity-80">Living Motion.</span>
-            </h1>
-            <p class="max-w-md text-sm leading-relaxed opacity-70 mb-8">
-                Building a bridge between ancestral dance and future robotics. We use high-precision motion capture to teach legacy to machines.
-            </p>
-            <div class="flex space-x-4">
-                <a href="CultureDex/index.html" class="btn-action">Enter the Archive</a>
-                <button class="px-6 py-3 text-xs font-bold uppercase tracking-widest border-b border-current opacity-40 hover:opacity-100 transition">Our Methodology</button>
-            </div>
-        </div>
-
-        <!-- Stats Card -->
-        <div class="card stats-card animate-in" style="animation-delay: 0.2s">
-            <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-4 opacity-60">Impact Snapshot</h3>
-            <div class="space-y-6">
-                <div>
-                    <span class="text-4xl font-cinzel font-bold">142</span>
-                    <p class="text-[10px] uppercase tracking-widest opacity-70">Cultural Dances Mapped</p>
-                </div>
-                <div>
-                    <span class="text-4xl font-cinzel font-bold">0.8ms</span>
-                    <p class="text-[10px] uppercase tracking-widest opacity-70">Robotic Response Latency</p>
-                </div>
-                <button class="mt-4 w-full py-3 bg-white bg-opacity-10 border border-white border-opacity-20 rounded-2xl text-[10px] uppercase tracking-widest font-bold hover:bg-opacity-20 transition">
-                    WRO 2026 Roadmap
-                </button>
-            </div>
-        </div>
-
-        <!-- Featured Artist Stack -->
-        <div class="card featured-stack animate-in" style="animation-delay: 0.3s">
-            <div>
-                <span class="tag">Top Contributor</span>
-                <h3 class="font-cinzel text-xl">Heritage Masters</h3>
-            </div>
-            <div class="overlap-container">
-                <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 1">
-                <img src="https://images.unsplash.com/photo-1535525153412-5a42439a210d?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 2">
-                <img src="https://images.unsplash.com/photo-1543783333-00f244bb7867?auto=format&fit=crop&q=80&w=200" class="overlap-img" alt="Master 3">
-            </div>
-            <a href="CultureDex/index.html" class="text-[10px] text-center opacity-50 italic hover:opacity-100 underline transition">Browse CultureDex Contributors</a>
-        </div>
-
-        <!-- News/Insights -->
-        <div class="card side-news animate-in" style="animation-delay: 0.4s">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-cinzel text-xl">Recent Insights</h3>
-                <span class="text-[9px] uppercase font-bold opacity-30 cursor-pointer hover:opacity-100 transition">View All</span>
-            </div>
-            <div class="space-y-6">
-                <div class="group cursor-pointer">
-                    <span class="text-[10px] font-bold text-[var(--accent-purple)]">Robotics</span>
-                    <h4 class="text-sm font-semibold group-hover:underline">Mapping the Fluidity of Flamenco</h4>
-                    <p class="text-[11px] opacity-50 mt-1">Technical analysis of heel-work preservation in Dancer-Bot V4.</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <span class="text-[10px] font-bold text-[var(--accent-purple)]">Ethics</span>
-                    <h4 class="text-sm font-semibold group-hover:underline">Ownership of Motion Data</h4>
-                    <p class="text-[11px] opacity-50 mt-1">Collaborating with UNESCO on movement sovereignty.</p>
-                </div>
-                <div class="group cursor-pointer">
-                    <span class="text-[10px] font-bold text-[var(--accent-purple)]">Events</span>
-                    <h4 class="text-sm font-semibold group-hover:underline">WRO 2026 Finals Venue</h4>
-                    <p class="text-[11px] opacity-50 mt-1">Announcement of the Future Innovators arena.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hardware Promo -->
-        <div class="card promo-bar animate-in" style="animation-delay: 0.5s">
-            <div class="flex items-center space-x-6">
-                <div class="w-16 h-16 rounded-2xl bg-[var(--accent-purple)] flex items-center justify-center text-white font-cinzel text-2xl">
-                    EW
-                </div>
-                <div>
-                    <h3 class="font-cinzel text-lg">EchoWeave Core Kit</h3>
-                    <p class="text-xs opacity-50">Educational robotics for cultural preservation.</p>
-                </div>
-            </div>
-            <button class="btn-action">Pre-order Kit</button>
-        </div>
-
-        <!-- Categories (Grid within Grid) -->
-        <div class="col-span-full grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
-                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Classical</h4>
-            </div>
-            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
-                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Folk Traditions</h4>
-            </div>
-            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1496293455970-f8581aae0e3c?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
-                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Contemporary</h4>
-            </div>
-            <div onclick="window.location.href='CultureDex/index.html'" class="card h-64 flex flex-col justify-end p-6 group cursor-pointer" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=500'); background-size: cover;">
-                <h4 class="font-cinzel text-white text-lg group-hover:translate-x-2 transition-transform">Ritual Motion</h4>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="mt-20 py-16 px-8 border-t border-[var(--border-color)] text-center">
-        <div class="font-cinzel text-xl font-bold opacity-30 mb-4">ECHOWEAVE</div>
-        <p class="text-[10px] uppercase tracking-[0.4em] opacity-40">Preserving Legacy • Forging Future</p>
-    </footer>
+<body>
+    <div class="container">
+        <!-- Your existing content here -->
+    </div>
 
     <script>
         // Theme Engine
