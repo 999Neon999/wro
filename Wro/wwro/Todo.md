@@ -7,7 +7,7 @@
 - [x] **Leg Link Segments:** Model and print 4x structural spacer bones to bridge the pitch joints (2 for shins connecting ankle to knee, 2 for thighs connecting knee to hip).
     
 - [ ] **$90^\circ$ Dual-Servo Shoulder Brackets:** Model and print 2x compact L-brackets that bind two servos together at a perpendicular angle to achieve both forward-back (pitch) and lateral-outward (roll) movement.
-- [ ] **Head:** join
+- [x] **Head:** join
     
 - [x] **Clamping Cages for MG996R:** Print your verified friction-fit clamping cages for the upper body and shoulder assemblies.
     
