@@ -1,20 +1,24 @@
 {
   "main": {
-    "id": "1d3486ec10870fc7",
+    "id": "e43d6767d22acfa0",
     "type": "split",
     "children": [
       {
-        "id": "c4e99f18ed280342",
+        "id": "17a507fc09ad938f",
         "type": "tabs",
         "children": [
           {
-            "id": "77e51cffa28a79c0",
+            "id": "5493980e69e24e42",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Todo.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Todo"
             }
           }
         ]
@@ -23,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "fa45139d888a77f9",
+    "id": "1a5b034b640b0cc3",
     "type": "split",
     "children": [
       {
-        "id": "4ce66c5b4f8ad2a1",
+        "id": "fcce6e02ebf241a6",
         "type": "tabs",
         "children": [
           {
-            "id": "c2d0b01adb292cbe",
+            "id": "ec06f282545a0ccd",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,7 +48,7 @@
             }
           },
           {
-            "id": "87de0996b796636b",
+            "id": "25c91aa3e806ca29",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +65,7 @@
             }
           },
           {
-            "id": "b606a4c98b571abd",
+            "id": "96c3d6efac661f43",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -70,28 +74,27 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
     "width": 300
   },
   "right": {
-    "id": "295621b6c74b7af6",
+    "id": "dddaeb0b81737a53",
     "type": "split",
     "children": [
       {
-        "id": "66716e11bc157ed3",
+        "id": "3894f02ee6e78d17",
         "type": "tabs",
         "children": [
           {
-            "id": "58af3a1cf19550e1",
+            "id": "3477cbb08cae5b1d",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Untitled.base",
+                "file": "Todo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -101,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Untitled"
+              "title": "Backlinks for Todo"
             }
           },
           {
-            "id": "9ace8aab133c07c3",
+            "id": "d11e36d5ba85ccb0",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Parts.md",
+                "file": "Todo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Parts"
+              "title": "Outgoing links from Todo"
             }
           },
           {
-            "id": "94c4e8c701bda348",
+            "id": "547b3b7632ae058a",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -134,7 +137,7 @@
             }
           },
           {
-            "id": "e793a7fc023aefaf",
+            "id": "2f6ceb40c0bc5e13",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -148,18 +151,18 @@
             }
           },
           {
-            "id": "dbd33482ac57e77e",
+            "id": "7fa9b2d11c3f1a1e",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "Parts.md",
+                "file": "Todo.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Parts"
+              "title": "Outline of Todo"
             }
           }
         ]
@@ -180,19 +183,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "77e51cffa28a79c0",
+  "active": "5493980e69e24e42",
   "lastOpenFiles": [
-    "wwro/Welcome.md",
-    "wwro",
-    "Untitled.md",
+    "Alignment.md",
+    "Welcome.md",
     "Todo.md",
     "Project.md",
-    "parts.md",
     "Parts.md",
-    "Untitled.base",
-    "Alignment.md",
-    "Feature.md",
-    "create a link.md",
-    "Welcome.md"
+    "parts.md",
+    "Feature.md"
   ]
 }
