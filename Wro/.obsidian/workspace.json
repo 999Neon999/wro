@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "021e3de5bef39772",
+        "id": "15f0de97fe10a12d",
         "type": "tabs",
         "children": [
           {
-            "id": "2040bc25b65b5104",
+            "id": "58b901346341a555",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Todo.md",
+                "file": "Untitled.base",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Todo"
+              "title": "Backlinks for Untitled"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Todo.md",
+                "file": "Parts.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Todo"
+              "title": "Outgoing links from Parts"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Todo.md",
+                "file": "Parts.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Todo"
+              "title": "Outline of Parts"
             }
           }
         ]
@@ -183,9 +183,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "2040bc25b65b5104",
+  "active": "58b901346341a555",
   "lastOpenFiles": [
+    "Project.md",
+    "parts.md",
+    "Parts.md",
     "Todo.md",
+    "Untitled.base",
+    "Alignment.md",
+    "Feature.md",
     "create a link.md",
     "Welcome.md"
   ]

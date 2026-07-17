@@ -1,128 +1,128 @@
-**Phase 1: Procurement & Asset Verification**
-- [ ] **Verify Existing Parts:** - Locate the Raspberry Pi 5 (2GB), Active Cooler, 32GB SD card, and MPU6050 IMU.
+## 🛠️ Phase 2: CAD, Slicing & 3D Printing
+
+### Model & Print Custom Structural Brackets (OpenSCAD)
+
+- [x] **Ankle Hoisting Foot Plates:** Print 2x of your stylized $110\text{ mm} \times 70\text{ mm}$ heavy-duty foot plates with the integrated vertical risers (pre-spaced M3 holes).
     
-    - Inspect the OV5647 Camera Module (confirm you have the correct 22-pin to 15-pin FPC CSI camera cable needed for the Pi 5).
-        
-- [ ] **Procure Serial Bus Servos:** - Select and order 17 Smart Serial Bus Servos (e.g., Feetech STS3215 or Lewansoul LX-16A/224).
+- [x] **Leg Link Segments:** Model and print 4x structural spacer bones to bridge the pitch joints (2 for shins connecting ankle to knee, 2 for thighs connecting knee to hip).
     
-    - Order a matching **USB-to-UART Serial Bus Servo Driver Board** (or a dedicated Pi GPIO shield).
-        
-- [ ] **Procure Raw Materials:**
+- [ ] **$90^\circ$ Dual-Servo Shoulder Brackets:** Model and print 2x compact L-brackets that bind two servos together at a perpendicular angle to achieve both forward-back (pitch) and lateral-outward (roll) movement.
+- [ ] **Head:** join
     
-    - Order a sheet of **3mm Polycarbonate (Lexan)** or **Delrin (POM)** for the load-bearing leg bones.
-        
-    - _Optional alternative:_ Get a small block of MDF sheet for cheap, rapid laser-cut prototyping.
-        
-    - Buy a fresh spool of high-density **PETG or Tough PLA** filament for the Ender 3 V3.
-        
-- [ ] **Hardware Fasteners:** - Buy a multipack box of M2, M2.5, and M3 stainless steel machine screws, nuts, and washers.
-**Phase 2: Headless Brain & Sensor Setup (Software)**
-- [ ] **Flash the Operating System:** - Use Raspberry Pi Imager to flash **Raspberry Pi OS Lite (64-bit)** onto the 32GB SD card. (Ensures headless mode to save RAM).
+- [x] **Clamping Cages for MG996R:** Print your verified friction-fit clamping cages for the upper body and shoulder assemblies.
     
-- [ ] **Configure Network & SSH:**
+
+### Main Frame & Torso Plate
+
+- [ ] **Rigid Torso Frame:** Model and print a single-unit central chest plate that houses:
     
-    - Set up headless Wi-Fi credentials and enable SSH in the imager settings so you can code directly from your laptops.
+    - Mounting points for the Raspberry Pi 5 (using $2.5\text{ mm}$ nylon standoffs).
         
-- [ ] **Boot and Run System Updates:**
+    - Mounting points for the MPU6050 (positioned precisely at the physical center of mass).
+        
+    - Mounting points for both PCA9685 driver boards.
+        
+    - Structural mount slots at the bottom for the 2x Hip servos and at the top for the 2x Shoulder assemblies + 1x Neck Pan servo.
+        
+
+## ⚙️ Phase 3: Mechanical Assembly & Structural Integration
+
+### Assemble the 6-DOF Lower Body (Pitch-Only Legs)
+
+- [ ] Bolt the RDS3115 metal brackets directly onto your 3D-printed foot risers.
     
-    - Power up the Pi 5, SSH into it, and run: `sudo apt update && sudo apt upgrade -y`.
-        
-- [ ] **Isolate the Camera Feed:**
+- [ ] Interlock the 6 heavy-duty servos (Ankles $\rightarrow$ Knees $\rightarrow$ Hips) using your printed leg link segments.
     
-    - Connect the OV5647 camera, run `libcamera-hello --list-cameras`, and verify the system registers the sensor.
-        
-- [ ] **Install the Core ML Stack:**
+- [ ] **Vibration Defense:** Apply blue thread-locking fluid to all metal-to-metal screws to prevent fast dance vibrations from loosening the joints.
     
-    - Install Python virtual environments (`python3 -m venv aevum_env`).
-        
-    - Install **MediaPipe** and **TensorFlow Lite runtime** inside the environment.
-        
-- [ ] **Write the I2C Balance Sensor Script:**
+
+### Assemble the Torso & Electronics
+
+- [ ] Secure the Raspberry Pi 5 to the torso frame using non-conductive hardware.
     
-    - Enable I2C via `sudo raspi-config`.
-        
-    - Connect the MPU6050 to the Pi's GPIO pins (VCC, GND, SDA, SCL).
-        
-    - Write a raw Python script to print live, un-filtered Pitch and Roll telemetry to the terminal.
-**Phase 3: CAD, Laser-Cutting, & 3D Printing (Hardware)**
-- [ ] **Export the OpenSCAD Sub-Components:**
+- [ ] Mount the MPU6050 using nylon standoffs at the geometric center of mass.
     
-    - Take the `servo_cage` parameters from your script and isolate the dimensions.
-        
-    - Isolate the flat `poly_bone` measurements for thighs, shins, and arms.
-        
-- [ ] **Draft the 2D Sheet Profiles:**
+- [ ] Mount the left and right hip servos to the bottom of the torso frame.
     
-    - Open Inkscape or a CAD program and draw the exact 2D DXF shapes for your flat limb links based on the OpenSCAD proportions.
-        
-- [ ] **Fabricate the Flat Bones:**
+
+### Assemble the 6-DOF Arms & Head
+
+- [ ] Assemble the 3-axis arm chains (Shoulder Pitch $\rightarrow$ Shoulder Roll $\rightarrow$ Elbow Pitch) using your printed L-brackets and MG996R clamps.
     
-    - If your school laser cutter handles Delrin/MDF, cut your prototype shapes.
-        
-    - If using Polycarbonate, export your DXF files and take them to a local shop to be cut via a CNC router or Water-jet cutter.
-        
-- [ ] **Print the Servo Clamping Cages on the Ender 3 V3:**
+- [ ] Mount the neck pan servo to the center-top of the chest.
     
-    - Import your structural motor cages into your slicer.
-        
-    - Set infill to **45% Gyroid**, wall counts to **4 perimeters**, and material to **PETG/Tough PLA**.
-        
-    - Print a single test cage to verify the serial servo slides inside with a perfect friction-fit.
-        
-    - Print the remaining cages required for the 17-DOF joints.
-**Phase 4: Mechanical Integration & Wiring**
-- [ ] **Pre-Set Motor IDs:**
+- [ ] Secure the OV5647 camera module into a lightweight pan head bracket directly on the neck servo.
     
-    - Connect each serial servo one-by-one to your computer or Pi via the driver board.
-        
-    - Using the manufacturer's software utility, flash a permanent hardware ID (1 through 17) to each individual motor.
-        
-- [ ] **Assemble the Internal Hybrid Legs:**
+
+## 🔌 Phase 4: Power Distribution & Data Routing
+
+### Solder the Power Grid
+
+- [x] Solder the **A0** address bridge on your second PCA9685 board to change its hardware address to `0x41` (the lower-body board remains at `0x40`).
     
-    - Bolt the 3D-printed cages onto the flat polycarbonate thigh and shin sheets.
-        
-    - Install the serial servos inside the cages and lock down the horn splines.
-        
-- [ ] **Assemble the Torso Core:**
+- [ ] Construct a parallel 14AWG/16AWG wiring harness from your XT60 battery connector to the blue screw terminal blocks of both PCA9685 boards.
     
-    - Securely mount the Raspberry Pi 5 to the back deck mount.
-        
-    - Mount the MPU6050 exactly at the geometric center of mass of the pelvic plate using nylon standoffs.
-        
-- [ ] **Build the Sensory Head:**
+
+### Calibrate the Dual Buck Converters (CRITICAL)
+
+- [ ] Power on the raw battery lines with **nothing plugged into the Pi or servos**.
     
-    - Slide the OV5647 camera module into its dedicated helmet slot. Mount the head to the neck panning servo.
-        
-- [ ] **Daisy-Chain the Wiring Bus:**
+- [ ] Use your multimeter on the buck converter output terminals:
     
-    - Route a single 3-wire serial bus line through the right leg joints up to the controller board.
+    - Set Buck #1 (Pi Logic) to exactly **5.1V**.
         
-    - Repeat for the left leg, arms, and neck. Secure the lines tightly using zip-ties so wires don't snag during dance routines.
-**Phase 5: The Dance Recognition Loop (The Winning Edge)**
-- [ ] **Data Sourcing & Video Ingestion:**
-    
-    - Use `yt-dlp` to download high-resolution videos of classical master dancers performing clean stances.
+    - Set Buck #2 (Servo Power Rail) to **6.5V–6.8V** to safely maximize the torque of your DS3218 and RDS3115 servos.
         
-- [ ] **Landmark Extraction script:**
+
+### Clean Wire Routing
+
+- [ ] Route all 13 servo cables back to the torso cavity using protective expandable cable wrap (ensure enough slack exists for full joint articulation).
     
-    - Run a Python script on your computer to process those dance videos through MediaPipe Pose, saving the raw $x, y, z$ coordinates of the 33 landmarks.
-        
-- [ ] **Write the Normalization Formula:**
+- [ ] Connect the 6 Leg servos to PCA9685 #1 (`0x40`).
     
-    - Code the mathematical translation script: Shift the coordinate origin $(0,0,0)$ to the mid-pelvis, and divide all lengths by the shoulder width (Scale Invariance).
-        
-- [ ] **Calculate Joint Angles:**
+- [ ] Connect the 6 Arm servos + 1 Neck Pan servo to PCA9685 #2 (`0x41`).
     
-    - Implement the Vector Dot Product calculation inside your pipeline to convert raw normalized coordinates into exact physical angles ($\theta$).
-        
-- [ ] **Train the Lightweight Classifier:**
+- [ ] Plug your LiPo safety alarm into the white balance port of the battery.
     
-    - Train a dense neural network on your angle datasets to categorize your target dance stances. Export the final model to **TensorFlow Lite (`.tflite`) format**.
-        
-- [ ] **The Live Telemetry Loop:**
+
+## 🧠 Phase 5: AI Stack, Kinematics & Dance Loops
+
+### Install Core Edge ML Libraries
+
+- [ ] Activate `wro_env` on the Pi 5 and install your runtime dependencies:
     
-    - Run the `.tflite` model live on the Pi 5. Verify it classifies stances in under 10ms with over 90% confidence.
-        
-- [ ] **The Kinematic Command Handshake:**
+    Bash
     
-    - Link the classification script outputs directly to your serial servo Python library. When the code recognizes a human stance, it must instantly write the target angle vectors over the serial bus, forcing your custom polycarbonate robot to mimic the move!
+    ```
+    pip install opencv-python mediapipe torch torchvision adafruit-circuitpython-servokit
+    ```
+    
+
+### Write the 2D Inverse Kinematics (IK) Engine
+
+- [ ] Implement a simplified geometric IK solver for the 3-joint pitch legs. Because all three joints share the same parallel rotation axis, the knee angle $\theta_{knee}$ is calculated cleanly on a 2D plane:
+    
+
+$$\theta_{knee} = \pi - \arccos\left(\frac{L_{1}^2 + L_{2}^2 - D^2}{2 L_{1} L_{2}}\right)$$
+
+> Where $L_1$ is the thigh length, $L_2$ is the shin length, and $D$ is the target distance from the hip axis to the ankle axis.
+
+### Build the AI Pose Pipeline
+
+- [ ] Capture training frames of your dance choreography styles via MediaPipe Pose on your main PC.
+    
+- [ ] Train your LSTM classifier network to output stylized dance poses and export the final `.pth` weights file to the Pi 5.
+    
+- [ ] Write the deployment script (`main_dance.py`) to initialize both PCA9685 boards concurrently:
+    
+    Python
+    
+    ```
+    from adafruit_servokit import ServoKit
+    kit1 = ServoKit(channels=16, address=0x40) # Lower Body (Legs)
+    kit2 = ServoKit(channels=16, address=0x41) # Upper Body (Arms + Head)
+    ```
+    
+- [ ] Map the real-time AI classification arrays directly to the physical joint angles of your 13 servos.
+    
+- [ ] Profile the pipeline to ensure camera frame capture, neural network inference, and physical servo writes execute comfortably under your **15ms target latency window**.
