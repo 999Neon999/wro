@@ -22,7 +22,7 @@
         
     - Mounting points for both PCA9685 driver boards.
         
-    - Structural mount slots at the bottom for the 2x Hip servos and at the top for the 2x Shoulder assemblies + 1x Neck Pan servo.
+     - Structural mount slots at the bottom for the 2x Hip servos and at the top for the 2x Shoulder assemblies + 1x Neck Pan servo.
         
 
 ## ⚙️ Phase 3: Mechanical Assembly & Structural Integration
