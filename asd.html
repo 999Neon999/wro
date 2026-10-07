@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Kinematic Studio</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --accent: #ff6b35;
+      --accent-green: #00e676;
+      --accent-red: #ff5252;
+      --accent-blue: #29b6f6;
+      --text: #e0e0e0;
+      --border: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+    .container { max-width: 1000px; width: 100%; }
+    header { text-align: center; margin-bottom: 2rem; }
+    header h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 0.5rem; }
+    .config-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin-bottom: 2rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; }
+    
+    .btn { background: var(--accent); color: #fff; border: none; padding: 0.8rem 1.2rem; border-radius: 4px; font-weight: 600; cursor: pointer; }
+    .btn-green { background: var(--accent-green); color: #000; }
+    .btn-red { background: var(--accent-red); color: #fff; }
+    .btn-blue { background: var(--accent-blue); color: #000; }
+    .btn-secondary { background: #333; color: #fff; border: 1px solid var(--border); }
+    
+    .status-badge { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; background: #333; }
+    .status-badge.online { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); }
+    .status-badge.offline { background: rgba(255, 82, 82, 0.2); color: var(--accent-red); }
+    
+    .section-title { font-size: 1.3rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+    
+    .studio-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin-bottom: 2rem; }
+    .controls-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .controls-row input[type="number"] { background: #2a2a2a; border: 1px solid var(--border); color: #fff; padding: 0.6rem; border-radius: 4px; width: 80px; }
+    
+    .timeline { display: flex; gap: 0.8rem; overflow-x: auto; padding: 1rem 0; min-height: 100px; }
+    .frame-card { background: #2a2a2a; border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem; min-width: 140px; text-align: center; position: relative; }
+    .frame-card h4 { color: var(--accent); font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .frame-card p { font-size: 0.75rem; color: #aaa; margin-bottom: 0.6rem; }
+    .frame-card .remove-btn { position: absolute; top: 4px; right: 6px; color: var(--accent-red); cursor: pointer; font-weight: bold; }
+
+    .servo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+    .servo-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; }
+    .servo-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; }
+    .servo-title { font-weight: 600; color: #fff; }
+    .servo-ch { font-size: 0.75rem; color: #888; margin-left: 4px; }
+    .servo-angle { color: var(--accent); font-weight: bold; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>ESP32 KINEMATIC STUDIO</h1>
+    <p>14-Channel Controller & Calibration Hub</p>
+  </header>
+
+  <div class="config-card">
+    <button class="btn" onclick="connectBLE()">Pair & Connect Bluetooth</button>
+    <span class="status-badge offline" id="statusBadge">DISCONNECTED</span>
+  </div>
+
+  <div class="studio-panel">
+    <h2 class="section-title">Startup Calibration & Memory</h2>
+    <div class="controls-row">
+      <button class="btn btn-blue" onclick="saveHomeToESP32()">💾 Save Current Pose as Startup/Home</button>
+      <button class="btn btn-secondary" onclick="resetDefaults()">🔄 Reset ESP32 to 90° Defaults</button>
+    </div>
+    <p style="font-size:0.85rem; color:#aaa;">Adjust sliders below to calibrate your robot's rest position, then click <b>Save Current Pose</b>. The ESP32 will memorize these angles into internal Flash and start up in this exact pose next time power turns on.</p>
+  </div>
+
+  <div class="studio-panel">
+    <h2 class="section-title">Dance Creator Studio</h2>
+    <div class="controls-row">
+      <label>Step Delay (ms):</label>
+      <input type="number" id="frameDelay" value="10" min="1" max="100">
+      
+      <button class="btn btn-secondary" onclick="addKeyframe()">➕ Capture Pose</button>
+      <button class="btn btn-green" onclick="playSequence()">▶️ Play Dance</button>
+      <button class="btn btn-red" onclick="stopSequence()">⏹️ Stop</button>
+    </div>
+
+    <div class="controls-row">
+      <button class="btn btn-secondary" onclick="saveDanceToFile()">💾 Save Dance to PC</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📂 Load Dance</button>
+      <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="loadDanceFromFile(event)">
+      <button class="btn btn-red" onclick="clearTimeline()">🗑️ Clear Timeline</button>
+    </div>
+
+    <h3 style="font-size:0.95rem; margin-top: 1rem; color:#aaa;">Dance Timeline:</h3>
+    <div class="timeline" id="timelineContainer"></div>
+  </div>
+
+  <h2 class="section-title">Manual Joint Control</h2>
+  <div class="servo-grid" id="servoContainer"></div>
+</div>
+
+<script>
+  const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+  const CHARACTERISTIC_UUID_RX = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+
+  let rxCharacteristic = null;
+  let danceTimeline = [];
+  let isPlaying = false;
+
+  const jointMapping = [
+    { channel: 0, name: "Left Knee" },
+    { channel: 1, name: "Left Feet" },
+    { channel: 2, name: "Left Thigh" },
+    { channel: 3, name: "Left Hip" },
+    { channel: 4, name: "Right Feet" },
+    { channel: 5, name: "Right Knee" },
+    { channel: 6, name: "Right Thigh" },
+    { channel: 7, name: "Right Hip" },
+    { channel: 8, name: "Right Shoulder" },
+    { channel: 9, name: "Right Elbow" },
+    { channel: 10, name: "Right Wrist" },
+    { channel: 11, name: "Left Shoulder" },
+    { channel: 12, name: "Left Elbow" },
+    { channel: 13, name: "Left Wrist" }
+  ];
+
+  let currentAngles = new Array(14).fill(90);
+
+  const container = document.getElementById('servoContainer');
+  jointMapping.forEach(joint => {
+    const card = document.createElement('div');
+    card.className = 'servo-card';
+    card.innerHTML = `
+      <div class="servo-header">
+        <span>
+          <span class="servo-title">${joint.name}</span>
+          <span class="servo-ch">(Ch ${joint.channel})</span>
+        </span>
+        <span class="servo-angle" id="angle-val-${joint.channel}">90°</span>
+      </div>
+      <input type="range" id="servo-${joint.channel}" min="0" max="180" value="90" oninput="updateServo(${joint.channel}, this.value)">
+    `;
+    container.appendChild(card);
+  });
+
+  async function connectBLE() {
+    const badge = document.getElementById('statusBadge');
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        filters: [{ name: 'ESP32_14Ch_Servos' }],
+        optionalServices: [SERVICE_UUID]
+      });
+
+      const server = await device.gatt.connect();
+      const service = await server.getPrimaryService(SERVICE_UUID);
+      rxCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID_RX);
+
+      badge.className = "status-badge online";
+      badge.textContent = "CONNECTED (BLE)";
+    } catch (e) {
+      badge.className = "status-badge offline";
+      badge.textContent = "FAILED TO CONNECT";
+    }
+  }
+
+  async function sendBLECommand(cmd) {
+    if (!rxCharacteristic) return;
+    const encoder = new TextEncoder();
+    await rxCharacteristic.writeValue(encoder.encode(cmd));
+  }
+
+  let debounceTimers = {};
+  function updateServo(channel, angle) {
+    currentAngles[channel] = parseInt(angle);
+    document.getElementById(`angle-val-${channel}`).textContent = `${angle}°`;
+    
+    clearTimeout(debounceTimers[channel]);
+    debounceTimers[channel] = setTimeout(() => {
+      sendBLECommand(`s${channel}a${angle}`);
+    }, 40);
+  }
+
+  // --- CALIBRATION FUNCTIONS ---
+
+  function saveHomeToESP32() {
+    // Send "save <A0> <A1> ... <A13>"
+    const cmd = `save ${currentAngles.join(' ')}`;
+    sendBLECommand(cmd);
+    alert("Saved current pose into ESP32 internal memory as startup default!");
+  }
+
+  function resetDefaults() {
+    sendBLECommand("reset");
+    currentAngles.fill(90);
+    for (let i = 0; i < 14; i++) {
+      document.getElementById(`servo-${i}`).value = 90;
+      document.getElementById(`angle-val-${i}`).textContent = "90°";
+    }
+    alert("Reset ESP32 startup memory to default 90°!");
+  }
+
+  // --- STUDIO SEQUENCER LOGIC ---
+
+  function addKeyframe() {
+    const delay = parseInt(document.getElementById('frameDelay').value) || 10;
+    danceTimeline.push({ angles: [...currentAngles], speed: delay });
+    renderTimeline();
+  }
+
+  function removeKeyframe(index) {
+    danceTimeline.splice(index, 1);
+    renderTimeline();
+  }
+
+  function clearTimeline() {
+    danceTimeline = [];
+    renderTimeline();
+  }
+
+  function renderTimeline() {
+    const container = document.getElementById('timelineContainer');
+    container.innerHTML = "";
+    danceTimeline.forEach((frame, idx) => {
+      const card = document.createElement('div');
+      card.className = "frame-card";
+      card.innerHTML = `
+        <span class="remove-btn" onclick="removeKeyframe(${idx})">✕</span>
+        <h4>Pose #${idx + 1}</h4>
+        <p>Speed Delay: ${frame.speed}ms</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  async function playSequence() {
+    if (danceTimeline.length === 0) return alert("Add some keyframes first!");
+    isPlaying = true;
+
+    for (let i = 0; i < danceTimeline.length; i++) {
+      if (!isPlaying) break;
+      const frame = danceTimeline[i];
+      
+      frame.angles.forEach((angle, ch) => {
+        document.getElementById(`servo-${ch}`).value = angle;
+        document.getElementById(`angle-val-${ch}`).textContent = `${angle}°`;
+        currentAngles[ch] = angle;
+      });
+
+      const cmd = `${frame.angles.join(' ')} ${frame.speed}`;
+      await sendBLECommand(cmd);
+      await new Promise(r => setTimeout(r, 800)); 
+    }
+    isPlaying = false;
+  }
+
+  function stopSequence() { isPlaying = false; }
+
+  function saveDanceToFile() {
+    if (danceTimeline.length === 0) return alert("Timeline is empty!");
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(danceTimeline, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "my_robot_dance.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  }
+
+  function loadDanceFromFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        danceTimeline = JSON.parse(e.target.result);
+        renderTimeline();
+      } catch (err) { alert("Invalid dance file format."); }
+    };
+    reader.readAsText(file);
+  }
+</script>
+
+</body>
+</html>
